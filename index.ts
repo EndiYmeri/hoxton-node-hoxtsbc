@@ -22,14 +22,14 @@ function getRandomInt() {
     return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
   }
 
-app.post('/register',async (req, res) => {
+app.post('/signup',async (req, res) => {
     
-    const {name, email, password} = req.body
+    const {fullname, email, password} = req.body
     try{
         // create a hash
         const hash = bcrypt.hashSync(password, 8)
         const registeredUser = await prisma.user.create({
-            data:{name,email, password: hash, amount: getRandomInt()},
+            data:{fullname,email, password: hash, amountInAccount: getRandomInt()},
             include: {transactions: true}
         }) 
         res.send(registeredUser)
@@ -40,7 +40,6 @@ app.post('/register',async (req, res) => {
     }
 })
 
-
 app.post('/login',async ( req, res) => {
     const {email, password} = req.body
     try{
@@ -49,7 +48,7 @@ app.post('/login',async ( req, res) => {
             where:{email},
             include:{transactions:true}
         })
-        if(user){
+        if(user){ 
             const passwordMatches = bcrypt.compareSync(password, user.password)
             if(passwordMatches){
                 res.send(user)
@@ -64,6 +63,10 @@ app.post('/login',async ( req, res) => {
         res.status(400).send({error:"User/password invalid!"})
     }
 
+})
+
+app.get('/banking-info', async (req, res) => {
+       const jwtToken = req.headers.authorization 
 })
 
 
