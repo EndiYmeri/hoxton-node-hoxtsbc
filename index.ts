@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs"
 // this loads all variables created in the .env file
 import 'dotenv/config'
+import jwt from 'jsonwebtoken'
 
 // We can then access any variable with:
 process.env.MY_VARIABLE_NAME
